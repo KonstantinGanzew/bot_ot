@@ -62,7 +62,7 @@ territory_street_keyboard = InlineKeyboardMarkup(
 premises_office_keyboard = InlineKeyboardMarkup(
     inline_keyboard = [
         [
-            InlineKeyboardButton(text='Можно поскользнуться, споткнуться', callback_data=key.premises_office_callback.new(item_premises_office='you_can_slip')),
+            InlineKeyboardButton(text='Можно поскользнуться, споткнуться', callback_data=key.premises_office_callback.new(item_premises_office='slip_stumble')),
         ],
         [
             InlineKeyboardButton(text='Можно удариться', callback_data=key.premises_office_callback.new(item_premises_office='can_be_hit')),
@@ -88,10 +88,10 @@ premises_office_keyboard = InlineKeyboardMarkup(
 out_of_work_keyboard = InlineKeyboardMarkup(
     inline_keyboard = [
         [
-            InlineKeyboardButton(text='Неправильно ведутся работы', callback_data=key.out_of_work_callback.new(item_out_of_work='you_can_slip')),
+            InlineKeyboardButton(text='Неправильно ведутся работы', callback_data=key.out_of_work_callback.new(item_out_of_work='wrong_work_being_done')),
         ],
         [
-            InlineKeyboardButton(text='Небезопасное пространство', callback_data=key.out_of_work_callback.new(item_out_of_work='can_be_hit')),
+            InlineKeyboardButton(text='Небезопасное пространство', callback_data=key.out_of_work_callback.new(item_out_of_work='unsafe_space')),
         ],
         [
             InlineKeyboardButton(text='Назад', callback_data=key.out_of_work_callback.new(item_out_of_work='back')),

@@ -20,7 +20,7 @@ async def menu_observer(call: CallbackQuery, callback_data: dict):
     await call.message.edit_text('Выявление любых опасностей вокруг себя (во время выполнения работ, в офисе или вне его)', reply_markup=key.observer_keyboard)
     await call.answer()
 
-# Подменю наблюдатель, територия офисса
+# Подменю наблюдатель, територия вне офисса
 @dp.callback_query_handler(call_datas.observer_callback.filter(item_observer='territory_street'))
 async def menu_observer(call: CallbackQuery, callback_data: dict):
     logging.info(f'call = {callback_data}')
@@ -47,4 +47,31 @@ async def menu_observer(call: CallbackQuery, callback_data: dict):
     text = 'Концепция бота проста – дело каждого сотрудника находить риски вокруг себя, то есть ситуации где что-то Может пойти не так, и отправлять фото или описание опасности в систему. За каждую «пойманную» опасность сотруднику будут начисляться баллы, которые он сможет обменять на брендированные товары или другие бонусы.'
     logging.info(f'call = {callback_data}')
     await call.message.edit_text(text, reply_markup=key.menu_keyboard)
+    await call.answer()
+
+
+# Назад из пункта територия вне офисса
+@dp.callback_query_handler(call_datas.territory_street_callback.filter(item_territory_street='back'))
+async def menu_observer(call: CallbackQuery, callback_data: dict):
+    text = 'Выявление любых опасностей вокруг себя (во время выполнения работ, в офисе или вне его)'
+    logging.info(f'call = {callback_data}')
+    await call.message.edit_text(text, reply_markup=key.observer_keyboard)
+    await call.answer()
+
+
+# Назад из пункта територия офисса
+@dp.callback_query_handler(call_datas.premises_office_callback.filter(item_premises_office='back'))
+async def menu_observer(call: CallbackQuery, callback_data: dict):
+    text = 'Выявление любых опасностей вокруг себя (во время выполнения работ, в офисе или вне его)'
+    logging.info(f'call = {callback_data}')
+    await call.message.edit_text(text, reply_markup=key.observer_keyboard)
+    await call.answer()
+
+
+# Назад из пункта вне офисса
+@dp.callback_query_handler(call_datas.out_of_work_callback.filter(item_out_of_work='back'))
+async def menu_observer(call: CallbackQuery, callback_data: dict):
+    text = 'Выявление любых опасностей вокруг себя (во время выполнения работ, в офисе или вне его)'
+    logging.info(f'call = {callback_data}')
+    await call.message.edit_text(text, reply_markup=key.observer_keyboard)
     await call.answer()
