@@ -4,7 +4,16 @@ from aiogram.types import Message, CallbackQuery
 from loader import dp
 import keybords.inline.choice_buttons as key
 import keybords.inline.callback_datas as call_datas
+from aiogram.dispatcher.filters.state import StatesGroup, State
+from aiogram.dispatcher import FSMContext
 import erp
+
+from aiogram.dispatcher.filters.state import StatesGroup, State
+
+class Observer(StatesGroup):
+
+    photo = State()
+    description = State()
 
 # Кнопка старт, аутентифицирует человека, отправляет клавиатуру
 @dp.message_handler(Command('start'))
@@ -75,3 +84,27 @@ async def menu_observer(call: CallbackQuery, callback_data: dict):
     logging.info(f'call = {callback_data}')
     await call.message.edit_text(text, reply_markup=key.observer_keyboard)
     await call.answer()
+
+# Подменю наблюдатель, територия вне офисса
+@dp.callback_query_handler(call_datas.territory_street_callback.filter(item_territory_street='you_can_slip'))
+async def menu_observer(call: CallbackQuery, callback_data: dict):
+    logging.info(f'call = {callback_data}')
+    await call.message.edit_text('Прикрепи фото')
+    await Observer.photo.set()
+    await call.answer()
+
+@dp.message_handler(content_types=['photo'], state = Observer.photo)
+async def complaint(message: Message, state: FSMContext) -> None:
+    async with state.proxy() as data:
+        data['photo'] = message.photo[0].file_id
+    
+    print(message)
+    await message.reply('Отправь описание')
+    await Observer.next()
+
+@dp.message_handler(state = Observer.description)
+async def complaint_desc(message: Message, state: FSMContext) -> None:
+    async with state.proxy() as data:
+        data['desc'] = message.text
+        print(data)
+    await state.finish()

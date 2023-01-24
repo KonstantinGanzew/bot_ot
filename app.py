@@ -1,4 +1,5 @@
 from loader import bot
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 
 async def on_shutdown(dp):
@@ -6,6 +7,7 @@ async def on_shutdown(dp):
 
 
 if __name__ == '__main__':
+    storage = MemoryStorage()
     from aiogram import executor
     from handlers import dp
 
