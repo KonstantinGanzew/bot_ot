@@ -7,12 +7,12 @@ import keybords.inline.callback_datas as call_datas
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.dispatcher import FSMContext
 import erp
-from bd.sql import db_start, create_profile, edit_profile
+from bd.sql import create_profile, edit_profile
 from aiogram.dispatcher.filters.state import StatesGroup, State
 
 class Observer(StatesGroup):
 
-#    callback_history = State()
+    callback_history = State()
     photo = State()
     description = State()
 
@@ -88,74 +88,30 @@ async def menu_observer(call: CallbackQuery, callback_data: dict):
 
 # Подменю наблюдатель, територия вне офисса
 @dp.callback_query_handler(call_datas.territory_street_callback.filter(item_territory_street='you_can_slip'))
-async def menu_observer(call: CallbackQuery, callback_data: dict):
+async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMContext):
     logging.info(f'call = {callback_data}')
     await call.message.edit_text('Прикрепи фото')
-    await Observer.photo.set()
+    await Observer.callback_history.set()
+    async with state.proxy() as data:
+        data['callback_history'] = call['data']
+    await Observer.next()
     await call.answer()
 
 @dp.message_handler(content_types=['photo'], state = Observer.photo)
 async def complaint(message: Message, state: FSMContext) -> None:
     async with state.proxy() as data:
         data['photo'] = message.photo[0].file_id
-    
-    print(message)
-    await message.reply('Отправь описание')
-    await Observer.next()
-
-@dp.message_handler(state = Observer.description)
-async def complaint_desc(message: Message, state: FSMContext) -> None:
-    async with state.proxy() as data:
-        data['desc'] = message.text
-        print(data)
-    await state.finish()
-
-'''# Подменю наблюдатель, територия вне офисса
-@dp.callback_query_handler(call_datas.territory_street_callback.filter(item_territory_street='you_can_slip'))
-async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMContext):
-    logging.info(f'call = {callback_data}')
-    await call.message.edit_text('Опишите проблему')
-    await Observer.callback_history.set()
-    async with state.proxy() as data:
-        data['callback_history'] = call['data']
-        print(data)
-    await Observer.next()
-
-
-@dp.message_handler(state = Observer.photo)
-async def complaint(message: Message, state: FSMContext) -> None:
-    async with state.proxy() as data:
-        data['photo'] = message.photo[0].file_id
         if message.caption != None:
             data['desc'] = message.caption
-            print(f"{data['photo']}, {data['callback_history']}, {data['desc']}")
+            await message.answer('Обращение зафиксировано', reply_markup=key.territory_street_keyboard)
             await state.finish()
         else:
-            await message.reply('Отправь описание')    
+            await message.reply('Отправь описание')
             await Observer.next()
 
 @dp.message_handler(state = Observer.description)
 async def complaint_desc(message: Message, state: FSMContext) -> None:
     async with state.proxy() as data:
         data['desc'] = message.text
-        print(message)
+    await message.answer('Обращение зафиксировано', reply_markup=key.territory_street_keyboard)
     await state.finish()
-
-# Подменю наблюдатель, територия вне офисса
-#@dp.callback_query_handler(call_datas.territory_street_callback.filter(item_territory_street='you_can_slip'))
-#async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMContext):
-#    logging.info(f'call = {callback_data}')
-#    await call.message.edit_text('Опишите проблему')
-#    await Observer.callback_history.set()
-#    async with state.proxy() as data:
-#        data['callback_history'] = call['data']
-#    await Observer.next()
-#    await call.answer('Продолжаем')
-
-#@dp.message_handler(state = Observer.description)
-#async def complaint(message: Message, state: FSMContext) -> None:
-#    async with state.proxy() as data:
-#        data['desc'] = message.text
-        #data['photo'] = message.photo[0].file_id
-#    print(message)
-#    await state.finish()'''
