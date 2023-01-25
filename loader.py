@@ -2,6 +2,8 @@ import config
 import logging
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from bd.sql import db_start, create_profile, edit_profile
+
 
 bot = Bot(config.BOT_TOKEN, parse_mode='HTML')
 storage = MemoryStorage()

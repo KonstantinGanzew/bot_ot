@@ -7,7 +7,7 @@ import keybords.inline.callback_datas as call_datas
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.dispatcher import FSMContext
 import erp
-
+from bd.sql import db_start, create_profile, edit_profile
 from aiogram.dispatcher.filters.state import StatesGroup, State
 
 class Observer(StatesGroup):
@@ -21,6 +21,7 @@ async def show_menu(message: Message):
     #if erp.get_id_erp(message.from_user.id) == 'ok':
     text = 'Концепция бота проста – дело каждого сотрудника находить риски вокруг себя, то есть ситуации где что-то Может пойти не так, и отправлять фото или описание опасности в систему. За каждую «пойманную» опасность сотруднику будут начисляться баллы, которые он сможет обменять на брендированные товары или другие бонусы.'
     await message.answer(text, reply_markup=key.menu_keyboard)
+    await create_profile(message.from_user.id)
 
 # Перенаправляет по меню наблюдатель
 @dp.callback_query_handler(call_datas.menu_callback.filter(item_menu="observer"))
