@@ -12,13 +12,13 @@ from aiogram.dispatcher.filters.state import StatesGroup, State
 
 class Observer(StatesGroup):
 
+#    callback_history = State()
     photo = State()
     description = State()
 
 # Кнопка старт, аутентифицирует человека, отправляет клавиатуру
 @dp.message_handler(Command('start'))
 async def show_menu(message: Message):
-    #if erp.get_id_erp(message.from_user.id) == 'ok':
     text = 'Концепция бота проста – дело каждого сотрудника находить риски вокруг себя, то есть ситуации где что-то Может пойти не так, и отправлять фото или описание опасности в систему. За каждую «пойманную» опасность сотруднику будут начисляться баллы, которые он сможет обменять на брендированные товары или другие бонусы.'
     await message.answer(text, reply_markup=key.menu_keyboard)
     await create_profile(message.from_user.id)
@@ -109,3 +109,53 @@ async def complaint_desc(message: Message, state: FSMContext) -> None:
         data['desc'] = message.text
         print(data)
     await state.finish()
+
+'''# Подменю наблюдатель, територия вне офисса
+@dp.callback_query_handler(call_datas.territory_street_callback.filter(item_territory_street='you_can_slip'))
+async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    logging.info(f'call = {callback_data}')
+    await call.message.edit_text('Опишите проблему')
+    await Observer.callback_history.set()
+    async with state.proxy() as data:
+        data['callback_history'] = call['data']
+        print(data)
+    await Observer.next()
+
+
+@dp.message_handler(state = Observer.photo)
+async def complaint(message: Message, state: FSMContext) -> None:
+    async with state.proxy() as data:
+        data['photo'] = message.photo[0].file_id
+        if message.caption != None:
+            data['desc'] = message.caption
+            print(f"{data['photo']}, {data['callback_history']}, {data['desc']}")
+            await state.finish()
+        else:
+            await message.reply('Отправь описание')    
+            await Observer.next()
+
+@dp.message_handler(state = Observer.description)
+async def complaint_desc(message: Message, state: FSMContext) -> None:
+    async with state.proxy() as data:
+        data['desc'] = message.text
+        print(message)
+    await state.finish()
+
+# Подменю наблюдатель, територия вне офисса
+#@dp.callback_query_handler(call_datas.territory_street_callback.filter(item_territory_street='you_can_slip'))
+#async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMContext):
+#    logging.info(f'call = {callback_data}')
+#    await call.message.edit_text('Опишите проблему')
+#    await Observer.callback_history.set()
+#    async with state.proxy() as data:
+#        data['callback_history'] = call['data']
+#    await Observer.next()
+#    await call.answer('Продолжаем')
+
+#@dp.message_handler(state = Observer.description)
+#async def complaint(message: Message, state: FSMContext) -> None:
+#    async with state.proxy() as data:
+#        data['desc'] = message.text
+        #data['photo'] = message.photo[0].file_id
+#    print(message)
+#    await state.finish()'''
