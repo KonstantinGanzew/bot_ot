@@ -5,13 +5,13 @@ async def db_start():
     db = sq.connect('user.db')
     cur = db.cursor()
 
-    cur.execute('CREATE TABLE IF NOT EXISTS profile(user_id TEXT PRIMARY KEY, photo TEXT, age TEXT, desc TEXT, name TEXT)')
+    cur.execute('CREATE TABLE IF NOT EXISTS profile(user_id TEXT PRIMARY KEY, username TEXT, point INT)')
     db.commit()
 
-async def create_profile(user_id):
+async def create_profile(user_id, username):
     user = cur.execute("SELECT 1 FROM profile WHERE user_id == '{key}'".format(key=user_id)).fetchone()
     if not user:
-        cur.execute('INSERT INTO profile VALUES(?, ?, ?, ?, ?)', (user_id, '', '', '', ''))
+        cur.execute('INSERT INTO profile VALUES(?, ?, ?)', (user_id, username, 0))
         db.commit()
 
 async def edit_profile(state, user_id):

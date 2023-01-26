@@ -71,6 +71,9 @@ premises_office_keyboard = InlineKeyboardMarkup(
             InlineKeyboardButton(text='Можно упасть с высоты', callback_data=key.premises_office_callback.new(item_premises_office='fall_from_a_height')),
         ],
         [
+            InlineKeyboardButton(text='Что-то может упасть на голову', callback_data=key.premises_office_callback.new(item_premises_office='fall_on_your_head')),
+        ],
+        [
             InlineKeyboardButton(text='Можно обжечься, загореться', callback_data=key.premises_office_callback.new(item_premises_office='you_can_get_burned')),
         ],
         [

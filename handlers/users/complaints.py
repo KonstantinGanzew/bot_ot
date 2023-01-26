@@ -10,6 +10,28 @@ import erp
 from bd.sql import create_profile, edit_profile
 from aiogram.dispatcher.filters.state import StatesGroup, State
 
+CALL_KEY = {
+    'territory_street': {
+        'you_can_slip': 'Территория, улица. Можно поскользнуться, споткнуться.',
+        'can_be_hit': 'Территория, улица. Можно удариться.',
+        'fall_on_your_head': 'Территория, улица. Что-то может упасть на голову.',
+        'out_of_work': 'Территория, улица. Можно провалиться.',
+    },
+    'premises_office': {
+        'slip_stumble': 'Помещение, офис. Можно поскользнуться, споткнуться.',
+        'can_be_hit': 'Помещение, офис. Можно удариться.',
+        'fall_from_a_height': 'Помещение, офис. Можно упасть с высоты.',
+        'fall_on_your_head': 'Помещение, офис. Что-то может упасть на голову.',
+        'you_can_get_burned': 'Помещение, офис. Можно обжечься, загореться.',
+        'prick_cut': 'Помещение, офис. Можно уколоться, порезаться.',
+        'can_crush': 'Помещение, офис. Может придавить.',
+    },
+    'out_of_work': {
+        'wrong_work_being_done': 'Вне работы. Неправильно ведутся работы.',
+        'unsafe_space': 'Вне работы. Небезопасное пространство.',
+    }
+}
+
 class Observer(StatesGroup):
 
     callback_history = State()
@@ -21,7 +43,7 @@ class Observer(StatesGroup):
 async def show_menu(message: Message):
     text = 'Концепция бота проста – дело каждого сотрудника находить риски вокруг себя, то есть ситуации где что-то Может пойти не так, и отправлять фото или описание опасности в систему. За каждую «пойманную» опасность сотруднику будут начисляться баллы, которые он сможет обменять на брендированные товары или другие бонусы.'
     await message.answer(text, reply_markup=key.menu_keyboard)
-    await create_profile(message.from_user.id)
+    await create_profile(message.from_user.id, message.from_user.username)
 
 # Перенаправляет по меню наблюдатель
 @dp.callback_query_handler(call_datas.menu_callback.filter(item_menu="observer"))
@@ -93,7 +115,7 @@ async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMCont
     await call.message.edit_text('Прикрепи фото')
     await Observer.callback_history.set()
     async with state.proxy() as data:
-        data['callback_history'] = call['data']
+        data['callback_history'] = CALL_KEY[call['data'].split(':')[0]][call['data'].split(':')[1]]
     await Observer.next()
     await call.answer()
 
@@ -104,7 +126,7 @@ async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMCont
     await call.message.edit_text('Прикрепи фото')
     await Observer.callback_history.set()
     async with state.proxy() as data:
-        data['callback_history'] = call['data']
+        data['callback_history'] = CALL_KEY[call['data'].split(':')[0]][call['data'].split(':')[1]]
     await Observer.next()
     await call.answer()
 
@@ -115,7 +137,7 @@ async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMCont
     await call.message.edit_text('Прикрепи фото')
     await Observer.callback_history.set()
     async with state.proxy() as data:
-        data['callback_history'] = call['data']
+        data['callback_history'] = CALL_KEY[call['data'].split(':')[0]][call['data'].split(':')[1]]
     await Observer.next()
     await call.answer()
 
@@ -126,7 +148,7 @@ async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMCont
     await call.message.edit_text('Прикрепи фото')
     await Observer.callback_history.set()
     async with state.proxy() as data:
-        data['callback_history'] = call['data']
+        data['callback_history'] = CALL_KEY[call['data'].split(':')[0]][call['data'].split(':')[1]]
     await Observer.next()
     await call.answer()
 
@@ -137,7 +159,7 @@ async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMCont
     await call.message.edit_text('Прикрепи фото')
     await Observer.callback_history.set()
     async with state.proxy() as data:
-        data['callback_history'] = call['data']
+        data['callback_history'] = CALL_KEY[call['data'].split(':')[0]][call['data'].split(':')[1]]
     await Observer.next()
     await call.answer()
 
@@ -148,7 +170,7 @@ async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMCont
     await call.message.edit_text('Прикрепи фото')
     await Observer.callback_history.set()
     async with state.proxy() as data:
-        data['callback_history'] = call['data']
+        data['callback_history'] = CALL_KEY[call['data'].split(':')[0]][call['data'].split(':')[1]]
     await Observer.next()
     await call.answer()
 
@@ -159,7 +181,18 @@ async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMCont
     await call.message.edit_text('Прикрепи фото')
     await Observer.callback_history.set()
     async with state.proxy() as data:
-        data['callback_history'] = call['data']
+        data['callback_history'] = CALL_KEY[call['data'].split(':')[0]][call['data'].split(':')[1]]
+    await Observer.next()
+    await call.answer()
+
+# Подменю наблюдатель, територия вне офисса
+@dp.callback_query_handler(call_datas.premises_office_callback.filter(item_premises_office='fall_on_your_head'))
+async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    logging.info(f'call = {callback_data}')
+    await call.message.edit_text('Прикрепи фото')
+    await Observer.callback_history.set()
+    async with state.proxy() as data:
+        data['callback_history'] = CALL_KEY[call['data'].split(':')[0]][call['data'].split(':')[1]]
     await Observer.next()
     await call.answer()
 
@@ -170,7 +203,7 @@ async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMCont
     await call.message.edit_text('Прикрепи фото')
     await Observer.callback_history.set()
     async with state.proxy() as data:
-        data['callback_history'] = call['data']
+        data['callback_history'] = CALL_KEY[call['data'].split(':')[0]][call['data'].split(':')[1]]
     await Observer.next()
     await call.answer()
 
@@ -181,7 +214,7 @@ async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMCont
     await call.message.edit_text('Прикрепи фото')
     await Observer.callback_history.set()
     async with state.proxy() as data:
-        data['callback_history'] = call['data']
+        data['callback_history'] = CALL_KEY[call['data'].split(':')[0]][call['data'].split(':')[1]]
     await Observer.next()
     await call.answer()
 
@@ -192,7 +225,7 @@ async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMCont
     await call.message.edit_text('Прикрепи фото')
     await Observer.callback_history.set()
     async with state.proxy() as data:
-        data['callback_history'] = call['data']
+        data['callback_history'] = CALL_KEY[call['data'].split(':')[0]][call['data'].split(':')[1]]
     await Observer.next()
     await call.answer()
 
@@ -203,7 +236,7 @@ async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMCont
     await call.message.edit_text('Прикрепи фото')
     await Observer.callback_history.set()
     async with state.proxy() as data:
-        data['callback_history'] = call['data']
+        data['callback_history'] = CALL_KEY[call['data'].split(':')[0]][call['data'].split(':')[1]]
     await Observer.next()
     await call.answer()
 
@@ -214,7 +247,8 @@ async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMCont
     await call.message.edit_text('Прикрепи фото')
     await Observer.callback_history.set()
     async with state.proxy() as data:
-        data['callback_history'] = call['data']
+        data['callback_history'] = CALL_KEY[call['data'].split(':')[0]][call['data'].split(':')[1]]
+        print(type(call['data']))
     await Observer.next()
     await call.answer()
 
