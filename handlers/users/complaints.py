@@ -97,6 +97,127 @@ async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMCont
     await Observer.next()
     await call.answer()
 
+# Подменю наблюдатель, територия вне офисса
+@dp.callback_query_handler(call_datas.territory_street_callback.filter(item_territory_street='can_be_hit'))
+async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    logging.info(f'call = {callback_data}')
+    await call.message.edit_text('Прикрепи фото')
+    await Observer.callback_history.set()
+    async with state.proxy() as data:
+        data['callback_history'] = call['data']
+    await Observer.next()
+    await call.answer()
+
+# Подменю наблюдатель, територия вне офисса
+@dp.callback_query_handler(call_datas.territory_street_callback.filter(item_territory_street='fall_on_your_head'))
+async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    logging.info(f'call = {callback_data}')
+    await call.message.edit_text('Прикрепи фото')
+    await Observer.callback_history.set()
+    async with state.proxy() as data:
+        data['callback_history'] = call['data']
+    await Observer.next()
+    await call.answer()
+
+# Подменю наблюдатель, територия вне офисса
+@dp.callback_query_handler(call_datas.territory_street_callback.filter(item_territory_street='out_of_work'))
+async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    logging.info(f'call = {callback_data}')
+    await call.message.edit_text('Прикрепи фото')
+    await Observer.callback_history.set()
+    async with state.proxy() as data:
+        data['callback_history'] = call['data']
+    await Observer.next()
+    await call.answer()
+
+# Подменю наблюдатель, територия вне офисса
+@dp.callback_query_handler(call_datas.premises_office_callback.filter(item_premises_office='slip_stumble'))
+async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    logging.info(f'call = {callback_data}')
+    await call.message.edit_text('Прикрепи фото')
+    await Observer.callback_history.set()
+    async with state.proxy() as data:
+        data['callback_history'] = call['data']
+    await Observer.next()
+    await call.answer()
+
+# Подменю наблюдатель, територия вне офисса
+@dp.callback_query_handler(call_datas.premises_office_callback.filter(item_premises_office='can_be_hit'))
+async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    logging.info(f'call = {callback_data}')
+    await call.message.edit_text('Прикрепи фото')
+    await Observer.callback_history.set()
+    async with state.proxy() as data:
+        data['callback_history'] = call['data']
+    await Observer.next()
+    await call.answer()
+
+# Подменю наблюдатель, територия вне офисса
+@dp.callback_query_handler(call_datas.premises_office_callback.filter(item_premises_office='fall_from_a_height'))
+async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    logging.info(f'call = {callback_data}')
+    await call.message.edit_text('Прикрепи фото')
+    await Observer.callback_history.set()
+    async with state.proxy() as data:
+        data['callback_history'] = call['data']
+    await Observer.next()
+    await call.answer()
+
+# Подменю наблюдатель, територия вне офисса
+@dp.callback_query_handler(call_datas.premises_office_callback.filter(item_premises_office='you_can_get_burned'))
+async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    logging.info(f'call = {callback_data}')
+    await call.message.edit_text('Прикрепи фото')
+    await Observer.callback_history.set()
+    async with state.proxy() as data:
+        data['callback_history'] = call['data']
+    await Observer.next()
+    await call.answer()
+
+# Подменю наблюдатель, територия вне офисса
+@dp.callback_query_handler(call_datas.premises_office_callback.filter(item_premises_office='prick_cut'))
+async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    logging.info(f'call = {callback_data}')
+    await call.message.edit_text('Прикрепи фото')
+    await Observer.callback_history.set()
+    async with state.proxy() as data:
+        data['callback_history'] = call['data']
+    await Observer.next()
+    await call.answer()
+
+# Подменю наблюдатель, територия вне офисса
+@dp.callback_query_handler(call_datas.premises_office_callback.filter(item_premises_office='can_crush'))
+async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    logging.info(f'call = {callback_data}')
+    await call.message.edit_text('Прикрепи фото')
+    await Observer.callback_history.set()
+    async with state.proxy() as data:
+        data['callback_history'] = call['data']
+    await Observer.next()
+    await call.answer()
+
+# Подменю наблюдатель, територия вне офисса
+@dp.callback_query_handler(call_datas.out_of_work_callback.filter(item_out_of_work='wrong_work_being_done'))
+async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    logging.info(f'call = {callback_data}')
+    await call.message.edit_text('Прикрепи фото')
+    await Observer.callback_history.set()
+    async with state.proxy() as data:
+        data['callback_history'] = call['data']
+    await Observer.next()
+    await call.answer()
+
+# Подменю наблюдатель, територия вне офисса
+@dp.callback_query_handler(call_datas.out_of_work_callback.filter(item_out_of_work='unsafe_space'))
+async def menu_observer(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    logging.info(f'call = {callback_data}')
+    await call.message.edit_text('Прикрепи фото')
+    await Observer.callback_history.set()
+    async with state.proxy() as data:
+        data['callback_history'] = call['data']
+    await Observer.next()
+    await call.answer()
+
 @dp.message_handler(content_types=['photo'], state = Observer.photo)
 async def complaint(message: Message, state: FSMContext) -> None:
     async with state.proxy() as data:
